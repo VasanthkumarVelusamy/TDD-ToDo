@@ -26,9 +26,8 @@ final class ToDoItemStoreTests: XCTestCase {
     
     func test_add_shouldPublishChange() throws {
         let sut = ToDoItemStore()
-        let publisherExpectation = expectation(description: "Wait for publisher in \(#file)")
         let toDoItem = ToDoItem(title: "Dummy")
-        var receivedItems: [ToDoItem] = try wait(for: sut.itemPublisher) {
+        let receivedItems: [ToDoItem] = try wait(for: sut.itemPublisher) {
             sut.add(toDoItem)
         }
         XCTAssertEqual(receivedItems, [toDoItem])

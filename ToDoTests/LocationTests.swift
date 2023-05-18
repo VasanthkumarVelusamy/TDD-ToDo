@@ -7,7 +7,6 @@
 
 import XCTest
 @testable import ToDo
-import CoreLocation
 
 final class LocationTests: XCTestCase {
 
@@ -25,7 +24,7 @@ final class LocationTests: XCTestCase {
     }
     
     func test_init_setsCoordinate() throws {
-        let coordinate = CLLocationCoordinate2D(latitude: 1, longitude: 2)
+        let coordinate = Coordinate(longitude: 2, latitude: 1)
         let location = Location(title: "Dummy location", coordinate: coordinate)
         let resultCoordinate = try XCTUnwrap(location.coordinate)
         XCTAssertEqual(resultCoordinate.latitude, 1, accuracy: 0.000_001)

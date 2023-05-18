@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct ToDoItem: Equatable {
+struct ToDoItem: Equatable, Codable {
     
     static func == (lhs: ToDoItem, rhs: ToDoItem) -> Bool {
         lhs.id == rhs.id

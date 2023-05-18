@@ -11,26 +11,33 @@ import Combine
 
 final class ToDoItemStoreTests: XCTestCase {
     
+    var sut: ToDoItemStore!
+    
     override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-        
-        // In UI tests it is usually best to stop immediately when a failure occurs.
-        continueAfterFailure = false
-        
-        // In UI tests it’s important to set the initial state - such as interface orientation - required for your tests before they run. The setUp method is a good place to do this.
+        sut = ToDoItemStore()
     }
     
     override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+        sut = nil
     }
     
     func test_add_shouldPublishChange() throws {
-        let sut = ToDoItemStore()
         let toDoItem = ToDoItem(title: "Dummy")
         let receivedItems: [ToDoItem] = try wait(for: sut.itemPublisher) {
             sut.add(toDoItem)
         }
         XCTAssertEqual(receivedItems, [toDoItem])
+    }
+    
+    func test_check_shouldPublishChange() throws {
+        let toDoItem = ToDoItem(title: "Dummy")
+        sut.add(toDoItem)
+        sut.add(ToDoItem(title: "Dummy_2"))
+        let receivedItems: [ToDoItem] = try wait(for: sut.itemPublisher) {
+            sut.check(toDoItem)
+        }
+        let doneItems = receivedItems.filter { $0.done }
+        XCTAssertEqual(doneItems, [toDoItem])
     }
 }
 
@@ -40,7 +47,10 @@ extension XCTestCase {
         
         for publisher: T,
         
-        afterChange change: () -> Void) throws
+        afterChange change: () -> Void,
+        file: StaticString = #file,
+        line: UInt = #line
+    ) throws
     
     -> T.Output where T.Failure == Never {
         
@@ -74,7 +84,9 @@ extension XCTestCase {
             
             result,
             
-            "Publisher did not publish any value"
+            "Publisher did not publish any value",
+            file: file,
+            line: line
             
         )
         

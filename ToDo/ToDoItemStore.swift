@@ -20,4 +20,12 @@ class ToDoItemStore {
         items.append(item)
     }
     
+    func check(_ item: ToDoItem) {
+        var mutableItem = item
+        mutableItem.done = true
+        if let index = items.firstIndex(of: item) {
+            items[index] = mutableItem
+        }
+    }
+    
 }

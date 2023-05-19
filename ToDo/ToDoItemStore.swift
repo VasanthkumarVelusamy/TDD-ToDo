@@ -8,7 +8,7 @@
 import Foundation
 import Combine
 
-class ToDoItemStore {
+class ToDoItemStore: ToDoItemStoreProtocol {
     var itemPublisher = CurrentValueSubject<[ToDoItem], Never>([])
     private let fileName: String
     

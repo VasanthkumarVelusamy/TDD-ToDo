@@ -48,5 +48,38 @@ final class ToDoItemsListViewControllerTests: XCTestCase {
         let result = sut.tableView.numberOfRows(inSection: 0)
         XCTAssertEqual(result, 2)
     }
+    
+    func test_cellForRow_whenPassedToDoItem_setsCorrectTitle() throws {
+        let titleUnderTest = "Dummy"
+        toDoItemStoreMock.itemPublisher.send([ToDoItem(title: titleUnderTest)])
+        let tableView = try XCTUnwrap(sut.tableView)
+        let indexPath = IndexPath(row: 0, section: 0)
+        let cell = tableView.dataSource?.tableView(tableView, cellForRowAt: indexPath) as? ToDoItemCell
+        XCTAssertEqual(cell?.titleLabel.text, titleUnderTest)
+    }
+    
+    func test_cellForRow_shouldReturnTitle2() throws {
+        let toDoItem1 = ToDoItem(title: "Dummy1")
+        let toDoItem2 = ToDoItem(title: "Dummy2")
+        toDoItemStoreMock.itemPublisher.send([toDoItem1, toDoItem2])
+        let tableView = try XCTUnwrap(sut.tableView)
+        let indexPath = IndexPath(row: 1, section: 0)
+        let cell = tableView.dataSource?.tableView(tableView, cellForRowAt: indexPath) as? ToDoItemCell
+        XCTAssertEqual(cell?.titleLabel.text, "Dummy2")
+    }
+    
+    func test_cellForRowAt_shouldReturnCellWithDate() throws {
+        let date = Date()
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy/MM/dd"
+        let expectedString = dateFormatter.string(from: date)
+        let toDoItem = ToDoItem(title: "Dummy", timeStamp: date.timeIntervalSince1970)
+        toDoItemStoreMock.itemPublisher.send([toDoItem])
+        let tableView = try XCTUnwrap(sut.tableView)
+        let indexPath = IndexPath(row: 0, section: 0)
+        let cell = tableView.dataSource?.tableView(tableView, cellForRowAt: indexPath) as? ToDoItemCell
+
+        XCTAssertEqual(cell?.dateLabel.text, expectedString)
+    }
 
 }

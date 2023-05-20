@@ -28,3 +28,11 @@ struct ToDoItem: Equatable, Codable {
         self.location = location
     }
 }
+
+extension ToDoItem: Hashable {
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+    
+}

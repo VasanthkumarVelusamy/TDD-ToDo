@@ -9,7 +9,7 @@ import XCTest
 @testable import ToDo
 
 final class ToDoItemsListViewControllerTests: XCTestCase {
-
+    
     var sut: ToDoItemsListViewController!
     var toDoItemStoreMock: ToDoItemStoreProtocolMock!
     
@@ -20,7 +20,7 @@ final class ToDoItemsListViewControllerTests: XCTestCase {
         sut.toDoItemStore = toDoItemStoreMock
         sut.loadViewIfNeeded()
     }
-
+    
     override func tearDownWithError() throws {
         sut = nil
     }
@@ -78,20 +78,22 @@ final class ToDoItemsListViewControllerTests: XCTestCase {
         let tableView = try XCTUnwrap(sut.tableView)
         let indexPath = IndexPath(row: 0, section: 0)
         let cell = tableView.dataSource?.tableView(tableView, cellForRowAt: indexPath) as? ToDoItemCell
-
+        
         XCTAssertEqual(cell?.dateLabel.text, expectedString)
     }
     
-    // ToDoItemsListViewControllerTests.swift
-
     func test_numberOfSections_shouldReturnTwo() {
-      var doneItem = ToDoItem(title: "dummy 2")
-      doneItem.done = true
-      toDoItemStoreMock.itemPublisher
-        .send([ToDoItem(title: "dummy 1"),
-               doneItem])
-      let result = sut.tableView.numberOfSections
-      XCTAssertEqual(result, 2)
+        var doneItem = ToDoItem(title: "dummy 2")
+        doneItem.done = true
+        toDoItemStoreMock.itemPublisher
+            .send([ToDoItem(title: "dummy 1"),
+                   doneItem])
+        let result = sut.tableView.numberOfSections
+        XCTAssertEqual(result, 2)
+    }
+    
+    func test_didSelectCellAt_shouldCallDelegate() throws {
+        let delegateMock = ToDoItemsListViewControllerProtocolMock()
     }
 
 }

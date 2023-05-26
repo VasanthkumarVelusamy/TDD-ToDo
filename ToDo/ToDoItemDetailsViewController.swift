@@ -15,4 +15,12 @@ class ToDoItemDetailsViewController: UIViewController {
     @IBOutlet var descriptionLabel: UILabel!
     @IBOutlet var mapView: MKMapView!
     @IBOutlet var doneButton: UIButton!
+    
+    var toDoItem: ToDoItem? {
+        didSet {
+            titleLabel.text = toDoItem?.title
+            dateLabel.text = toDoItem?.timeStamp?.getString(format: "yyyy/MM/dd")
+        }
+    }
+    
 }

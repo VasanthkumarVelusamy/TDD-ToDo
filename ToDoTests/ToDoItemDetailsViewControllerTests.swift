@@ -51,4 +51,23 @@ final class ToDoItemDetailsViewControllerTests: XCTestCase {
         XCTAssertTrue(doneButton.isDescendant(of: sut.view))
     }
     
+    func test_settingToDoItem_shouldUpdateTitleLabel() throws {
+        let title = "dummy title"
+        let toDoItem = ToDoItem(title: title)
+        sut.toDoItem = toDoItem
+        XCTAssertEqual(sut.titleLabel.text, title)
+    }
+    
+    func test_settingToDoItem_shouldUpdateDateLabel() throws {
+        let date = Date()
+        let title = "Dummy title"
+        let dateFormater = DateFormatter()
+        dateFormater.dateFormat = "yyyy/MM/dd"
+        let expectedDateString = dateFormater.string(from: date)
+        let timeStamp = date.timeIntervalSince1970
+        let toDoItem = ToDoItem(title: "Dummy", timeStamp: timeStamp)
+        sut.toDoItem = toDoItem
+        XCTAssertEqual(sut.dateLabel.text, expectedDateString)
+    }
+    
 }

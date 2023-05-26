@@ -18,8 +18,14 @@ class ToDoItemDetailsViewController: UIViewController {
     
     var toDoItem: ToDoItem? {
         didSet {
-            titleLabel.text = toDoItem?.title
-            dateLabel.text = toDoItem?.timeStamp?.getString(format: "yyyy/MM/dd")
+            guard let item = toDoItem else { return }
+            titleLabel.text = item.title
+            dateLabel.text = item.timeStamp?.getString(format: "yyyy/MM/dd")
+            if let itemCoordinate = item.location?.coordinate {
+                let coordinate = CLLocationCoordinate2D(latitude: itemCoordinate.latitude, longitude: itemCoordinate.longitude)
+                mapView.setCenter(coordinate, animated: false)
+            }
+            doneButton.isEnabled = !item.done
         }
     }
     

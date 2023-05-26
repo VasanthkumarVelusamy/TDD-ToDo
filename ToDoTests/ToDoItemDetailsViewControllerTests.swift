@@ -60,7 +60,6 @@ final class ToDoItemDetailsViewControllerTests: XCTestCase {
     
     func test_settingToDoItem_shouldUpdateDateLabel() throws {
         let date = Date()
-        let title = "Dummy title"
         let dateFormater = DateFormatter()
         dateFormater.dateFormat = "yyyy/MM/dd"
         let expectedDateString = dateFormater.string(from: date)
@@ -68,6 +67,31 @@ final class ToDoItemDetailsViewControllerTests: XCTestCase {
         let toDoItem = ToDoItem(title: "Dummy", timeStamp: timeStamp)
         sut.toDoItem = toDoItem
         XCTAssertEqual(sut.dateLabel.text, expectedDateString)
+    }
+    
+    func test_settingToDoItem_shouldUpdateMap() {
+        let latitude: Double = 10
+        let longitude: Double = 20
+        let toDoItem = ToDoItem(title: "Dummy",
+                                location: Location(title: "Some Location",
+                                                   coordinate: Coordinate(longitude: longitude,
+                                                                          latitude: latitude)))
+        sut.toDoItem = toDoItem
+        XCTAssertEqual(sut.mapView.centerCoordinate.latitude, latitude, accuracy: 0.000_01)
+        XCTAssertEqual(sut.mapView.centerCoordinate.longitude, longitude, accuracy: 0.000_01)
+    }
+    
+    func test_settingDoneToDoItem_shouldDisableDoneButton() {
+        var toDoItem = ToDoItem(title: "Dummy item")
+        toDoItem.done = true
+        sut.toDoItem = toDoItem
+        XCTAssertFalse(sut.doneButton.isEnabled)
+    }
+    
+    func test_settingUnDoneToDoItem_shouldEnableDoneButton() {
+        let toDoItem = ToDoItem(title: "Dummy item")
+        sut.toDoItem = toDoItem
+        XCTAssertTrue(sut.doneButton.isEnabled)
     }
     
 }

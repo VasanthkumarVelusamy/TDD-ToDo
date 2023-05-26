@@ -24,6 +24,7 @@ class ToDoItemsListViewController: UIViewController {
     private var token: AnyCancellable?
     let dateFormatter = DateFormatter()
     private var dataSource: UITableViewDiffableDataSource<Section, ToDoItem>?
+    var delegate: ToDoItemsListViewControllerProtocol?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,12 +43,21 @@ class ToDoItemsListViewController: UIViewController {
             self?.update(with: items)
         })
         dateFormatter.dateFormat = "yyyy/MM/dd"
+        tableView.delegate = self
     }
+    
     private func update(with items: [ToDoItem]) {
         var snapshot = NSDiffableDataSourceSnapshot<Section, ToDoItem>()
         snapshot.appendSections([.todo, .done])
         snapshot.appendItems((items.filter { false == $0.done }), toSection: .todo)
         snapshot.appendItems((items.filter { $0.done }), toSection: .done)
         dataSource?.apply(snapshot)
+    }
+}
+
+extension ToDoItemsListViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let item = items[indexPath.row]
+        delegate?.selectToDoItem(self, item: item)
     }
 }

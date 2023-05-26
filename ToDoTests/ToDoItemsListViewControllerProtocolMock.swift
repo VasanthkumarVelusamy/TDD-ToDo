@@ -9,5 +9,11 @@ import XCTest
 @testable import ToDo
 
 class ToDoItemsListViewControllerProtocolMock: ToDoItemsListViewControllerProtocol {
-
+    
+    var selectToDoItemsReceivedArguments: (viewController: UIViewController, item: ToDoItem)?
+    
+    func selectToDoItem(_ viewController: UIViewController, item: ToDo.ToDoItem) {
+        selectToDoItemsReceivedArguments = (viewController, item)
+    }
+    
 }

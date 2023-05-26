@@ -94,6 +94,13 @@ final class ToDoItemsListViewControllerTests: XCTestCase {
     
     func test_didSelectCellAt_shouldCallDelegate() throws {
         let delegateMock = ToDoItemsListViewControllerProtocolMock()
+        sut.delegate = delegateMock
+        let item = ToDoItem(title: "Dummy")
+        toDoItemStoreMock.itemPublisher.send([item])
+        let tableView = try XCTUnwrap(sut.tableView)
+        let indexPath = IndexPath(row: 0, section: 0)
+        tableView.delegate?.tableView?(tableView, didSelectRowAt: indexPath)
+        XCTAssertEqual(delegateMock.selectToDoItemsReceivedArguments?.item, item)
     }
-
+    
 }

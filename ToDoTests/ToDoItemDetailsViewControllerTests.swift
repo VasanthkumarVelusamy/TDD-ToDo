@@ -94,4 +94,33 @@ final class ToDoItemDetailsViewControllerTests: XCTestCase {
         XCTAssertTrue(sut.doneButton.isEnabled)
     }
     
+    func test_sendingButtonAction_shouldCheckItem() {
+        let toDoItem = ToDoItem(title: "Dummy")
+        sut.toDoItem = toDoItem
+        let storeMock = ToDoItemStoreProtocolMock()
+        sut.toDoItemStore = storeMock
+        sut.doneButton.sendActions(for: .touchUpInside)
+        XCTAssertEqual(storeMock.checkLastCallArgument, toDoItem)
+    }
+    
+    func test_tappingDoneButton_shouldDisableDoneButton() {
+        let toDoItem = ToDoItem(title: "Dummy")
+        sut.toDoItem = toDoItem
+        sut.doneButton.sendActions(for: .touchUpInside)
+        XCTAssertFalse(sut.doneButton.isEnabled)
+    }
+    
+    func test_notSettingLocation_shouldHideMapView() {
+        let toDoItem = ToDoItem(title: "Dummy")
+        sut.toDoItem = toDoItem
+        XCTAssertTrue(sut.mapView.isHidden)
+    }
+    
+    func test_settingLocation_shouldShowMapView() {
+        let location = Location(title: "COimbatore", coordinate: Coordinate(longitude: 20, latitude: 30))
+        
+        let toDoItem = ToDoItem(title: "Dummy", location: location)
+        sut.toDoItem = toDoItem
+        XCTAssertFalse(sut.mapView.isHidden)
+    }
 }

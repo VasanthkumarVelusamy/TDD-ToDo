@@ -16,6 +16,8 @@ class ToDoItemDetailsViewController: UIViewController {
     @IBOutlet var mapView: MKMapView!
     @IBOutlet var doneButton: UIButton!
     
+    var toDoItemStore: ToDoItemStoreProtocol?
+    
     var toDoItem: ToDoItem? {
         didSet {
             guard let item = toDoItem else { return }
@@ -25,7 +27,15 @@ class ToDoItemDetailsViewController: UIViewController {
                 let coordinate = CLLocationCoordinate2D(latitude: itemCoordinate.latitude, longitude: itemCoordinate.longitude)
                 mapView.setCenter(coordinate, animated: false)
             }
+            mapView.isHidden = (item.location?.coordinate == nil)
             doneButton.isEnabled = !item.done
+        }
+    }
+    
+    @IBAction func doneButtonTapped(_ sender: Any) {
+        if let toDoItem = toDoItem {
+            toDoItemStore?.check(toDoItem)
+            doneButton.isEnabled = false
         }
     }
     

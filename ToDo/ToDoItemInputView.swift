@@ -9,9 +9,8 @@ import SwiftUI
 
 struct ToDoItemInputView: View {
     @ObservedObject var data: ToDoItemData
-    @State var dummy = ""
     var body: some View {
-        TextField("Title", text: $dummy)
+        TextField("Title", text: $data.title)
     }
 }
 

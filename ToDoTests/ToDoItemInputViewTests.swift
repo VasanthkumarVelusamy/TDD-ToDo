@@ -35,5 +35,21 @@ final class ToDoItemInputViewTests: XCTestCase {
         let result = toDoItemData.title
         XCTAssertEqual(result, expected)
     }
+    
+    func test_whenNoDate_shouldNotShowDateInput() {
+        XCTAssertThrowsError(try sut.inspect().find(ViewType.DatePicker.self))
+    }
+    
+    func test_whenWithDate_shouldAllowDateInput() throws {
+        let exp = sut.on(\.didAppear) { view in
+            try view.find(ViewType.Toggle.self).tap()
+            let expected = Date(timeIntervalSince1970: 1_000_000)
+            try view.find(ViewType.DatePicker.self).select(date: expected)
+            let input = self.toDoItemData.date
+            XCTAssertEqual(input, expected)
+        }
+        ViewHosting.host(view: sut)
+        wait(for: [exp], timeout: 0.1)
+    }
 
 }
